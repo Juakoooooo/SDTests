@@ -1,0 +1,74 @@
+version: '3.9'
+
+networks:
+  mynetwork:
+    driver: bridge
+
+services:
+  my-redis:
+    image: bitnami/redis:latest
+    container_name: my-redis
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis-data:/bitnami/redis/data
+    networks:
+      - mynetwork
+
+  redis-init:
+    image: bitnami/redis:latest
+    container_name: redis-init
+    depends_on:
+      - my-redis
+    volumes:
+      - ./init-redis.sh:/usr/local/bin/init-redis.sh
+    entrypoint: ["/usr/local/bin/init-redis.sh"]
+    networks:
+      - mynetwork
+
+  dns-api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: dns-api
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_HOST=my-redis
+    depends_on:
+      - my-redis
+    networks:
+      - mynetwork
+    volumes:
+      - ./data:/app/data
+
+  grpc-dns-server:
+    build:
+      context: ./grpc-server
+      dockerfile: Dockerfile
+    container_name: grpc-dns-server
+    ports:
+      - "50051:50051"
+    depends_on:
+      - dns-api
+    networks:
+      - mynetwork
+
+  dns-traffic-gen:
+    build:
+      context: ./traffic-generator
+      dockerfile: Dockerfile
+    container_name: dns-traffic-gen
+    environment:
+      - API_URL=http://dns-api:5000
+    depends_on:
+      - dns-api
+    networks:
+      - mynetwork
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  redis-data:
