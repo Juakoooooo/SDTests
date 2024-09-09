@@ -18,11 +18,11 @@ redis_nodes = {
    'redis1': redis.StrictRedis(host='redis1', port=6379, decode_responses=True),
    'redis2': redis.StrictRedis(host='redis2', port=6379, decode_responses=True),
    'redis3': redis.StrictRedis(host='redis3', port=6379, decode_responses=True),
-   'redis4': redis.StrictRedis(host='redis4', port=6379, decode_responses=True)
-#    'redis5': redis.StrictRedis(host='redis5', port=6379, decode_responses=True),
-#    'redis6': redis.StrictRedis(host='redis6', port=6379, decode_responses=True),
-#    'redis7': redis.StrictRedis(host='redis7', port=6379, decode_responses=True),
-#    'redis8': redis.StrictRedis(host='redis8', port=6379, decode_responses=True)
+   'redis4': redis.StrictRedis(host='redis4', port=6379, decode_responses=True),
+   'redis5': redis.StrictRedis(host='redis5', port=6379, decode_responses=True),
+   'redis6': redis.StrictRedis(host='redis6', port=6379, decode_responses=True),
+   'redis7': redis.StrictRedis(host='redis7', port=6379, decode_responses=True),
+   'redis8': redis.StrictRedis(host='redis8', port=6379, decode_responses=True)
 }
 
 
