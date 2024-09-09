@@ -11,19 +11,19 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
 # Conexión a la instancia Redis cuando es única
-redis_node = redis.StrictRedis(host='redis1', port=6379, decode_responses=True)
+#redis_node = redis.StrictRedis(host='redis1', port=6379, decode_responses=True)
 
 # Conexión a las instancias Redis (aquí se ajusta en base a los casos solicitados)
-#redis_nodes = {
-#    #'redis1': redis.StrictRedis(host='redis1', port=6379, decode_responses=True)
-#    #'redis2': redis.StrictRedis(host='redis2', port=6379, decode_responses=True),
-#    #'redis3': redis.StrictRedis(host='redis3', port=6379, decode_responses=True),
-#    #'redis4': redis.StrictRedis(host='redis4', port=6379, decode_responses=True),
-#    #'redis5': redis.StrictRedis(host='redis5', port=6379, decode_responses=True),
-#    #'redis6': redis.StrictRedis(host='redis6', port=6379, decode_responses=True),
-#    #'redis7': redis.StrictRedis(host='redis7', port=6379, decode_responses=True),
-#    #'redis8': redis.StrictRedis(host='redis8', port=6379, decode_responses=True)
-#}
+redis_nodes = {
+   'redis1': redis.StrictRedis(host='redis1', port=6379, decode_responses=True),
+   'redis2': redis.StrictRedis(host='redis2', port=6379, decode_responses=True),
+   'redis3': redis.StrictRedis(host='redis3', port=6379, decode_responses=True),
+   'redis4': redis.StrictRedis(host='redis4', port=6379, decode_responses=True)
+#    'redis5': redis.StrictRedis(host='redis5', port=6379, decode_responses=True),
+#    'redis6': redis.StrictRedis(host='redis6', port=6379, decode_responses=True),
+#    'redis7': redis.StrictRedis(host='redis7', port=6379, decode_responses=True),
+#    'redis8': redis.StrictRedis(host='redis8', port=6379, decode_responses=True)
+}
 
 
 def get_redis_node_by_hash(key):
@@ -72,7 +72,7 @@ def resolve_domain():
     #redis_node, redis_partition = get_redis_node_by_hash(domain)
     
     # Asignación por Rango (Comentar si se usa hash)
-    #redis_node, redis_partition = get_redis_node_by_range(domain)
+    redis_node, redis_partition = get_redis_node_by_range(domain)
 
     # Revisar si existe en cache
     if redis_node.exists(domain):
@@ -80,10 +80,10 @@ def resolve_domain():
         logging.debug(f"Domain {domain} found in cache with IP {ip_address}")
 
         #Esto se utiliza en el caso de asignación a particiones
-        #return jsonify({"domain": domain, "ip": ip_address, "source": "cache", "partition": redis_partition}), 200
+        return jsonify({"domain": domain, "ip": ip_address, "source": "cache", "partition": redis_partition}), 200
 
         #Esto se utiliza en el caso de asignación a una única instancia
-        return jsonify({"domain": domain, "ip": ip_address, "source": "cache", "partition": "redis1"}), 200
+        #return jsonify({"domain": domain, "ip": ip_address, "source": "cache", "partition": "redis1"}), 200
     
     logging.debug(f"Domain {domain} not found in cache. Querying gRPC server.")
     try:
@@ -100,16 +100,16 @@ def resolve_domain():
             redis_node.set(domain, ip_address)
 
             #Esto se utiliza en el caso de asignación a particiones
-            #logging.debug(f"Cached {domain} with IP {ip_address} in {redis_partition}")
+            logging.debug(f"Cached {domain} with IP {ip_address} in {redis_partition}")
 
             #Esto se utiliza en el caso de asignación a una única instancia
-            logging.debug(f"Cached {domain} with IP {ip_address}")
+            #logging.debug(f"Cached {domain} with IP {ip_address}")
 
             #Esto se utiliza en el caso de asignación a particiones
-            #return jsonify({"domain": domain, "ip": ip_address, "source": "gRPC", "partition": redis_partition}), 200
+            return jsonify({"domain": domain, "ip": ip_address, "source": "gRPC", "partition": redis_partition}), 200
 
             #Esto se utiliza en el caso de asignación a una única instancia
-            return jsonify({"domain": domain, "ip": ip_address, "source": "gRPC", "partition": "redis1"}), 200
+            #return jsonify({"domain": domain, "ip": ip_address, "source": "gRPC", "partition": "redis1"}), 200
     except grpc.RpcError as e:
         logging.error(f"gRPC call failed: {e}")
         return jsonify({"error": f"gRPC call failed: {e}"}), 500

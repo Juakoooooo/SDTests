@@ -27,7 +27,7 @@ def generate_traffic(api_url, dataset_path, iterations=5):
     total_requests = 0
     for iteration in range(iterations):
         print(f"Starting iteration {iteration + 1} of {iterations}")
-        steps = random.randint(10000, 15000)
+        steps = random.randint(10000, 10500)
         print(f"Generated {steps} steps for iteration {iteration + 1}.")
 
         for step in range(steps):

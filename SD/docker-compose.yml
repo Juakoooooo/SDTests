@@ -17,43 +17,43 @@ services:
     networks:
       - mynetwork
 
-  #redis2:
-  #  image: bitnami/redis:latest
-  #  container_name: redis2
-  #  ports:
-  #    - "6380:6379"
-  #  environment:
-  #    - ALLOW_EMPTY_PASSWORD=yes
-  #  volumes:
-  #    - redis-data-2:/bitnami/redis/data
-  #  networks:
-  #    - mynetwork
+  redis2:
+   image: bitnami/redis:latest
+   container_name: redis2
+   ports:
+     - "6380:6379"
+   environment:
+     - ALLOW_EMPTY_PASSWORD=yes
+   volumes:
+     - redis-data-2:/bitnami/redis/data
+   networks:
+     - mynetwork
 
-  #redis3:
-  #  image: bitnami/redis:latest
-  #  container_name: redis3
-  #  ports:
-  #    - "6381:6379"
-  #  environment:
-  #    - ALLOW_EMPTY_PASSWORD=yes
-  #  volumes:
-  #    - redis-data-3:/bitnami/redis/data
-  #  networks:
-  #    - mynetwork
-  #    
-  #redis4:
-  #  image: bitnami/redis:latest
-  #  container_name: redis4
-  #  ports:
-  #    - "6382:6379"
-  #  environment:
-  #    - ALLOW_EMPTY_PASSWORD=yes
-  #  volumes:
-  #    - redis-data-4:/bitnami/redis/data
-  #  networks:
-  #    - mynetwork
+  redis3:
+   image: bitnami/redis:latest
+   container_name: redis3
+   ports:
+     - "6381:6379"
+   environment:
+     - ALLOW_EMPTY_PASSWORD=yes
+   volumes:
+     - redis-data-3:/bitnami/redis/data
+   networks:
+     - mynetwork
+     
+  redis4:
+   image: bitnami/redis:latest
+   container_name: redis4
+   ports:
+     - "6382:6379"
+   environment:
+     - ALLOW_EMPTY_PASSWORD=yes
+   volumes:
+     - redis-data-4:/bitnami/redis/data
+   networks:
+     - mynetwork
     
-  #redis5:
+  # redis5:
   #  image: bitnami/redis:latest
   #  container_name: redis5
   #  ports:
@@ -64,8 +64,8 @@ services:
   #    - redis-data-5:/bitnami/redis/data
   #  networks:
   #    - mynetwork
-  #  
-  #redis6:
+   
+  # redis6:
   #  image: bitnami/redis:latest
   #  container_name: redis6
   #  ports:
@@ -76,8 +76,8 @@ services:
   #    - redis-data-6:/bitnami/redis/data
   #  networks:
   #    - mynetwork
-  #  
-  #redis7:
+   
+  # redis7:
   #  image: bitnami/redis:latest
   #  container_name: redis7
   #  ports:
@@ -88,8 +88,8 @@ services:
   #    - redis-data-7:/bitnami/redis/data
   #  networks:
   #    - mynetwork
-  #  
-  #redis8:
+   
+  # redis8:
   #  image: bitnami/redis:latest
   #  container_name: redis8
   #  ports:
@@ -106,13 +106,13 @@ services:
     container_name: redis-init
     depends_on:
       - redis1
-      #- redis2
-      #- redis3
-      #- redis4
-      #- redis5
-      #- redis6
-      #- redis7
-      #- redis8
+      - redis2
+      - redis3
+      - redis4
+      # - redis5
+      # - redis6
+      # - redis7
+      # - redis8
     volumes:
       - ./init-redis.sh:/usr/local/bin/init-redis.sh
     entrypoint: ["/usr/local/bin/init-redis.sh"]
@@ -128,13 +128,13 @@ services:
       - "5000:5000"
     depends_on:
       - redis1
-      #- redis2
-      #- redis3
-      #- redis4
-      #- redis5
-      #- redis6
-      #- redis7
-      #- redis8
+      - redis2
+      - redis3
+      - redis4
+      # - redis5
+      # - redis6
+      # - redis7
+      # - redis8
     networks:
       - mynetwork
     volumes:
@@ -159,13 +159,13 @@ services:
       - "5540:5540" 
     depends_on:
       - redis1
-      #- redis2
-      #- redis3
-      #- redis4
-      #- redis5
-      #- redis6
-      #- redis7
-      #- redis8
+      - redis2
+      # - redis3
+      # - redis4
+      # - redis5
+      # - redis6
+      # - redis7
+      # - redis8
     networks:
       - mynetwork
     volumes:
@@ -173,11 +173,11 @@ services:
 
 volumes:
   redis-data-1:
-  #redis-data-2:
-  #redis-data-3:
-  #redis-data-4:
-  #redis-data-5:
-  #redis-data-6:
-  #redis-data-7:
-  #redis-data-8:
+  redis-data-2:
+  # redis-data-3:
+  # redis-data-4:
+  # redis-data-5:
+  # redis-data-6:
+  # redis-data-7:
+  # redis-data-8:
   redis-insight-data:
